@@ -2,7 +2,8 @@ import sys
 from pynput import keyboard
 
 buffer = []
-__version__ = "0.3.0-alpha"
+__version__ = "0.3.0"
+
 
 # TODO:thread para iterar a frase na lista e colorir a palavra com a syntax python
 
@@ -17,6 +18,13 @@ __version__ = "0.3.0-alpha"
 # with keyboard.Listener(on_release=on_release) as listener:
 #     listener.join()
 
+def save():
+    if input("Save buffer? [y/n]: ").lower().strip() == "y":
+        _arq = (L for L in buffer)
+        for L in _arq:
+            file.write(L + "\n")
+
+
 try:
     open(sys.argv[1])
 except FileNotFoundError:
@@ -29,21 +37,19 @@ try:
         line = 0
         empty = 0
         while True:
-            if empty == 2:
+            if empty == 1:
+                save()
                 break
             _in = input(f"[{line}]: ")
             buffer.insert(line, _in)
             if _in == "":
                 empty += 1
-                buffer.insert(-1, "")
             else:
                 empty = 0
             line += 1
     else:
         print("crid.py <FILE>")
 except KeyboardInterrupt:
-    _arq = (L for L in buffer)
-    for L in _arq:
-        file.write(L + "\n")
+    save()
 finally:
     file.close()
