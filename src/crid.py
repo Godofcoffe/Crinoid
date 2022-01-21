@@ -1,4 +1,5 @@
 import sys
+from os.path import isfile, exists
 from pynput import keyboard
 
 buffer = []
@@ -26,14 +27,15 @@ def save():
 
 
 try:
-    open(sys.argv[1])
-except FileNotFoundError:
-    file = open(sys.argv[1], "w")
-else:
-    file = open(sys.argv[1], "a")
-
-try:
     if 1 < len(sys.argv) < 3:
+        if len(sys.argv) == 1:
+            file_name = "foo.txt"
+        else:
+            file_name = sys.argv[1]
+        if isfile(file_name) and exists(file_name):
+            file = open(file_name)
+        else:
+            file = open(file_name, "w+")
         line = 0
         empty = 0
         while True:
